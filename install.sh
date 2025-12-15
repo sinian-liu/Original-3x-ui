@@ -146,6 +146,92 @@ config_after_install() {
     /usr/local/x-ui/x-ui migrate
 }
 
+# 汉化管理菜单函数
+chinese_menu() {
+    local xui_file="/usr/bin/x-ui"
+    
+    if [ ! -f "$xui_file" ]; then
+        echo -e "${yellow}警告：$xui_file 文件不存在，跳过汉化${plain}"
+        return 1
+    fi
+    
+    echo -e "${green}正在汉化管理菜单...${plain}"
+    
+    # 备份原文件
+    cp "$xui_file" "${xui_file}.backup.$(date +%Y%m%d%H%M%S)" >/dev/null 2>&1
+    
+    # 汉化主要菜单项
+    sed -i 's/3X-UI Panel Management Script/3X-UI 面板管理脚本/g' "$xui_file"
+    sed -i 's/Exit Script/退出脚本/g' "$xui_file"
+    sed -i 's/Install/安装/g' "$xui_file"
+    sed -i 's/Update/更新/g' "$xui_file"
+    sed -i 's/Update Menu/更新菜单/g' "$xui_file"
+    sed -i 's/Legacy Version/旧版本/g' "$xui_file"
+    sed -i 's/Uninstall/卸载/g' "$xui_file"
+    sed -i 's/Reset Username \& Password/重置用户名和密码/g' "$xui_file"
+    sed -i 's/Reset Web Base Path/重置Web基础路径/g' "$xui_file"
+    sed -i 's/Reset Settings/重置设置/g' "$xui_file"
+    sed -i 's/Change Port/更改端口/g' "$xui_file"
+    sed -i 's/View Current Settings/查看当前设置/g' "$xui_file"
+    sed -i 's/Start/启动/g' "$xui_file"
+    sed -i 's/Stop/停止/g' "$xui_file"
+    sed -i 's/Restart/重启/g' "$xui_file"
+    sed -i 's/Check Status/检查状态/g' "$xui_file"
+    sed -i 's/Logs Management/日志管理/g' "$xui_file"
+    sed -i 's/Enable Autostart/启用自启动/g' "$xui_file"
+    sed -i 's/Disable Autostart/禁用自启动/g' "$xui_file"
+    sed -i 's/SSL Certificate Management/SSL证书管理/g' "$xui_file"
+    sed -i 's/Cloudflare SSL Certificate/Cloudflare SSL证书/g' "$xui_file"
+    sed -i 's/IP Limit Management/IP限制管理/g' "$xui_file"
+    sed -i 's/Firewall Management/防火墙管理/g' "$xui_file"
+    sed -i 's/SSH Port Forwarding Management/SSH端口转发管理/g' "$xui_file"
+    sed -i 's/Enable BBR/启用BBR/g' "$xui_file"
+    sed -i 's/Update Geo Files/更新Geo文件/g' "$xui_file"
+    sed -i 's/Speedtest by Ookla/Ookla速度测试/g' "$xui_file"
+    sed -i 's/Panel state:/面板状态:/g' "$xui_file"
+    sed -i 's/Start automatically:/自启动:/g' "$xui_file"
+    sed -i 's/xray state:/xray状态:/g' "$xui_file"
+    sed -i 's/Please enter your selection/请输入您的选择/g' "$xui_file"
+    
+    # 汉化子菜单和选项
+    sed -i 's/Version:/版本:/g' "$xui_file"
+    sed -i 's/Domain:/域名:/g' "$xui_file"
+    sed -i 's/Port:/端口:/g' "$xui_file"
+    sed -i 's/Username:/用户名:/g' "$xui_file"
+    sed -i 's/Password:/密码:/g' "$xui_file"
+    sed -i 's/Base URI Path:/基础URI路径:/g' "$xui_file"
+    sed -i 's/Web Base Path:/网页基础路径:/g' "$xui_file"
+    sed -i 's/Cert File:/证书文件:/g' "$xui_file"
+    sed -i 's/Key File:/密钥文件:/g' "$xui_file"
+    sed -i 's/DNS Provider:/DNS提供商:/g' "$xui_file"
+    sed -i 's/Email:/邮箱:/g' "$xui_file"
+    sed -i 's/API Token:/API令牌:/g' "$xui_file"
+    sed -i 's/Enter your selection/请输入您的选择/g' "$xui_file"
+    sed -i 's/Invalid option/无效选项/g' "$xui_file"
+    sed -i 's/Operation cancelled/操作已取消/g' "$xui_file"
+    sed -i 's/Successfully/成功/g' "$xui_file"
+    sed -i 's/Failed/失败/g' "$xui_file"
+    sed -i 's/Error/错误/g' "$xui_file"
+    sed -i 's/Warning/警告/g' "$xui_file"
+    sed -i 's/Info/信息/g' "$xui_file"
+    sed -i 's/Confirm/确认/g' "$xui_file"
+    sed -i 's/Cancel/取消/g' "$xui_file"
+    sed -i 's/Back/返回/g' "$xui_file"
+    sed -i 's/Next/下一步/g' "$xui_file"
+    sed -i 's/Finish/完成/g' "$xui_file"
+    sed -i 's/Are you sure/您确定吗/g' "$xui_file"
+    sed -i 's/Yes/是/g' "$xui_file"
+    sed -i 's/No/否/g' "$xui_file"
+    sed -i 's/Processing/处理中/g' "$xui_file"
+    sed -i 's/Completed/已完成/g' "$xui_file"
+    sed -i 's/Running/运行中/g' "$xui_file"
+    sed -i 's/Stopped/已停止/g' "$xui_file"
+    sed -i 's/Enabled/已启用/g' "$xui_file"
+    sed -i 's/Disabled/已禁用/g' "$xui_file"
+    
+    echo -e "${green}管理菜单已汉化完成！${plain}"
+}
+
 install_x-ui() {
     cd /usr/local/
     
@@ -185,16 +271,12 @@ install_x-ui() {
         fi
     fi
     
-    # 修改：使用你自己的GitHub仓库中的汉化版本
-    echo -e "${green}下载汉化版管理脚本...${plain}"
-    wget --inet4-only -O /usr/bin/x-ui-temp https://raw.githubusercontent.com/sinian-liu/Original-3x-ui/master/x-ui-chinese.sh
+    # 首先下载原始英文版脚本
+    echo -e "${green}下载 x-ui 管理脚本...${plain}"
+    wget --inet4-only -O /usr/bin/x-ui-temp https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.sh
     if [[ $? -ne 0 ]]; then
-        echo -e "${yellow}下载汉化版管理脚本失败，尝试使用原版英文脚本...${plain}"
-        wget --inet4-only -O /usr/bin/x-ui-temp https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.sh
-        if [[ $? -ne 0 ]]; then
-            echo -e "${red}下载 x-ui.sh 失败${plain}"
-            exit 1
-        fi
+        echo -e "${red}下载 x-ui.sh 失败${plain}"
+        exit 1
     fi
     
     # 停止x-ui服务并移除旧资源
@@ -225,7 +307,12 @@ install_x-ui() {
     # 更新x-ui cli并设置权限
     mv -f /usr/bin/x-ui-temp /usr/bin/x-ui
     chmod +x /usr/bin/x-ui
+    
+    # 安装后配置
     config_after_install
+    
+    # 自动汉化管理菜单
+    chinese_menu
     
     if [[ $release == "alpine" ]]; then
         wget --inet4-only -O /etc/init.d/x-ui https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.rc
@@ -263,6 +350,9 @@ install_x-ui() {
 │  ${blue}x-ui install${plain}      - 安装                       │
 │  ${blue}x-ui uninstall${plain}    - 卸载                       │
 └───────────────────────────────────────────────────────┘"
+    
+    echo -e ""
+    echo -e "${green}提示：管理菜单已自动汉化，运行 'x-ui' 查看中文菜单${plain}"
 }
 
 echo -e "${green}正在运行...${plain}"
