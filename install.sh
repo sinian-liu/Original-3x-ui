@@ -184,10 +184,17 @@ install_x-ui() {
             exit 1
         fi
     fi
-    wget --inet4-only -O /usr/bin/x-ui-temp https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.sh
+    
+    # 修改：使用你自己的GitHub仓库中的汉化版本
+    echo -e "${green}下载汉化版管理脚本...${plain}"
+    wget --inet4-only -O /usr/bin/x-ui-temp https://raw.githubusercontent.com/sinian-liu/Original-3x-ui/master/x-ui-chinese.sh
     if [[ $? -ne 0 ]]; then
-        echo -e "${red}下载 x-ui.sh 失败${plain}"
-        exit 1
+        echo -e "${yellow}下载汉化版管理脚本失败，尝试使用原版英文脚本...${plain}"
+        wget --inet4-only -O /usr/bin/x-ui-temp https://raw.githubusercontent.com/MHSanaei/3x-ui/main/x-ui.sh
+        if [[ $? -ne 0 ]]; then
+            echo -e "${red}下载 x-ui.sh 失败${plain}"
+            exit 1
+        fi
     fi
     
     # 停止x-ui服务并移除旧资源
